@@ -60,13 +60,15 @@ const visitorsWithoutAncestors = {
             adjustment.totalAdjustment += textToInsert.length;
         }
 
-        walk.base.ClassDeclaration(node, state, c);
+        if( walk.base.ClassDeclaration )
+            walk.base.ClassDeclaration(node, state, c);
     },
     ForOfStatement(node, state: State, c) {
         if (node.await === true) {
             state.containsAwait = true;
         }
-        walk.base.ForOfStatement(node, state, c);
+        if( walk.base.ForOfStatement )
+            walk.base.ForOfStatement(node, state, c);
     },
     FunctionDeclaration(node, state) {
         const textToInsert = `this.${node.id.name} = ${node.id.name}; `;
@@ -96,11 +98,13 @@ const visitorsWithoutAncestors = {
     MethodDefinition: noop,
     AwaitExpression(node, state: State, c) {
         state.containsAwait = true;
-        walk.base.AwaitExpression(node, state, c);
+        if( walk.base.AwaitExpression )
+            walk.base.AwaitExpression(node, state, c);
     },
     ReturnStatement(node, state: State, c) {
         state.containsReturn = true;
-        walk.base.ReturnStatement(node, state, c);
+        if( walk.base.ReturnStatement )
+            walk.base.ReturnStatement(node, state, c);
     },
     VariableDeclaration(node: VariableDeclaration, state: State, c) {
         const variableKind = node.kind;
@@ -194,7 +198,8 @@ const visitorsWithoutAncestors = {
             });
         }
 
-        walk.base.VariableDeclaration(node as any, state, c);
+        if( walk.base.VariableDeclaration )
+            walk.base.VariableDeclaration(node as any, state, c);
     }
 };
 
