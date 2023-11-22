@@ -356,7 +356,7 @@
         "postinstall": "npm run download-api && npm run installtsnode && npm run fixNodeModule"
     },
     "dependencies": {
-        "@tensorflow/tfjs-vis": "^1.5.1",
+        "@tensorflow/tfjs": "^4.13.0",
         "acorn": "^8.4.1",
         "acorn-walk": "^8.1.1",
         "error-stack-parser": "^2.0.6",
