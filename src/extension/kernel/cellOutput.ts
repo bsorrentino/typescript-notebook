@@ -5,9 +5,7 @@ import {
     NotebookCellOutput,
     NotebookCellOutputItem,
     NotebookController,
-    NotebookDocument,
-    notebooks
-} from 'vscode';
+    NotebookDocument} from 'vscode';
 import { CellDiagnosticsProvider } from './problems';
 import { Compiler } from './compiler';
 import { DisplayData } from '../server/types';
@@ -34,17 +32,7 @@ export class CellOutput {
     public static resetCell(cell: NotebookCell) {
         tfVisContainersInACell.delete(cell);
     }
-    private get outputsByTfVisContainer() {
-        if (!NotebookTfVisOutputsByContainer.has(this.cell.notebook)) {
-            NotebookTfVisOutputsByContainer.set(
-                this.cell.notebook,
-                new Map<string, { cell: NotebookCell; output: NotebookCellOutput; deferred: Deferred<void> }>()
-            );
-        }
-        return NotebookTfVisOutputsByContainer.get(this.cell.notebook)!;
-    }
     private tempTask?: NotebookCellExecution;
-    private readonly rendererComms = notebooks.createRendererMessaging('tensorflow-vis-renderer');
     private get task() {
         if (this.tempTask) {
             return this.tempTask;
@@ -68,19 +56,6 @@ export class CellOutput {
         private readonly requestId: string
     ) {
         this.cell = originalTask.cell;
-        this.rendererComms.onDidReceiveMessage((e) => {
-            if (typeof e.message !== 'object' || !e.message) {
-                return;
-            }
-            type Message = {
-                containerId: string;
-                type: 'tfvisCleared';
-            };
-            const message = e.message as Message;
-            if (message.type === 'tfvisCleared') {
-                this.outputsByTfVisContainer.delete(message.containerId);
-            }
-        });
     }
     private setTask(task: NotebookCellExecution) {
         this.ended = false;
@@ -156,7 +131,6 @@ export class CellOutput {
             })
             .finally(() => this.endTempTask());
     }
-
     public appendOutput(output: DisplayData) {
         this.promise = this.promise
             .finally(async () => {

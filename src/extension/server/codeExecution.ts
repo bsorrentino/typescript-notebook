@@ -160,6 +160,7 @@ const magics = [new VariableListingMagicCommandHandler()];
 export async function execCode(request: RunCellRequest): Promise<void> {
     Utils.requestId = request.requestId;
     Plotly.requestId = request.requestId;
+    
     for (const magicHandler of magics) {
         if (magicHandler.isMagicCommand(request)) {
             try {
@@ -287,11 +288,14 @@ Module._load = function (request: any, parent: any) {
     if (request === 'node-kernel') {
         return Utils.instance;
     }
+    
+
     // eslint-disable-next-line prefer-rest-params
     const result = originalLoad.apply(this, arguments);
     if (request === 'readline') {
         ReadLineProxy.initialize(result);
     }
+    
     if (request === 'arquero') {
         ArqueroFormatter.initialize(result);
     }

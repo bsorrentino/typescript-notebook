@@ -96,12 +96,14 @@ export async function formatValue(value: unknown, requestId: string): Promise<Di
         }
         // Return as plain text.
         return { type: 'text', value: utilInspect(value), requestId };
+    
     } else if (value && Array.isArray(value)) {
         return {
             type: 'text',
             requestId,
             value: utilInspect(value) // stringify(value) // We use this in case we have circular references in the Objects.
         };
+    
     } else if (value && typeof value === 'object' && value.constructor?.name === 'Tensor') {
         return {
             type: 'text',

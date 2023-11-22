@@ -13,4 +13,3 @@ function onMessage(data?: { _type?: 'helloWorld' } | any) {
     }
 }
 
-
