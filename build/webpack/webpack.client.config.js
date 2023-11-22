@@ -9,6 +9,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const isProdBuild = constants.isCI || process.argv.some((argv) => argv.includes('mode') && argv.includes('production'));
 
 module.exports = {
+    cache: false,
     context: constants.ExtensionRootDir,
     entry: {
         tfjsvis: './src/client/index.ts',
@@ -76,7 +77,6 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 use: [
-                    { loader: 'cache-loader' },
                     {
                         loader: 'thread-loader',
                         options: {

@@ -47,7 +47,7 @@ export class DanfoNodePlotter {
     line(config = {}) {
         const ret_params = this.__get_plot_params(config);
 
-        const this_config = ret_params[0];
+        const this_config:Record<string,any> = ret_params[0];
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const params = ret_params[1] as string[];
 
@@ -142,7 +142,7 @@ export class DanfoNodePlotter {
     bar(config = {}) {
         const ret_params = this.__get_plot_params(config);
 
-        const this_config = ret_params[0];
+        const this_config:Record<string,any> = ret_params[0];
         const params = ret_params[1] as any;
 
         if (this.ndframe instanceof this.danfojs.Series) {
@@ -221,7 +221,7 @@ export class DanfoNodePlotter {
     scatter(config = {}) {
         const ret_params = this.__get_plot_params(config);
 
-        const this_config = ret_params[0];
+        const this_config:Record<string,any> = ret_params[0];
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const params = ret_params[1] as any;
 
@@ -309,7 +309,7 @@ export class DanfoNodePlotter {
     hist(config = {}) {
         const ret_params = this.__get_plot_params(config);
 
-        const this_config = ret_params[0];
+        const this_config:Record<string,any> = ret_params[0];
         const params = ret_params[1] as any;
 
         if (this.ndframe instanceof this.danfojs.Series) {
@@ -366,7 +366,7 @@ export class DanfoNodePlotter {
     pie(config = {}) {
         const ret_params = this.__get_plot_params(config);
 
-        const this_config = ret_params[0];
+        const this_config:Record<string,any> = ret_params[0];
 
         if (this.ndframe instanceof this.danfojs.Series) {
             const data = [
@@ -482,7 +482,7 @@ export class DanfoNodePlotter {
     box(config = {}) {
         const ret_params = this.__get_plot_params(config);
 
-        const this_config = ret_params[0];
+        const this_config:Record<string,any> = ret_params[0];
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const params = ret_params[1] as any[];
 
@@ -567,7 +567,7 @@ export class DanfoNodePlotter {
     violin(config = {}) {
         const ret_params = this.__get_plot_params(config);
 
-        const this_config = ret_params[0];
+        const this_config:Record<string,any> = ret_params[0];
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const params = ret_params[1] as any[];
 
@@ -653,7 +653,7 @@ export class DanfoNodePlotter {
     table(config = {}) {
         const ret_params = this.__get_plot_params(config);
 
-        const this_config = ret_params[0];
+        const this_config:Record<string,any> = ret_params[0];
         const header = {};
         const cells = {};
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
