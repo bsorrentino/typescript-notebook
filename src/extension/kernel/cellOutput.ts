@@ -5,13 +5,11 @@ import {
     NotebookCellOutput,
     NotebookCellOutputItem,
     NotebookController,
-    NotebookDocument,
-    notebooks
-} from 'vscode';
+    NotebookDocument} from 'vscode';
 import { CellDiagnosticsProvider } from './problems';
 import { Compiler } from './compiler';
-import { DisplayData, TensorFlowVis } from '../server/types';
-import { createDeferred, Deferred, noop } from '../coreUtils';
+import { DisplayData } from '../server/types';
+import { Deferred, noop } from '../coreUtils';
 
 const taskMap = new WeakMap<NotebookCell, CellOutput>();
 const tfVisContainersInACell = new WeakMap<NotebookCell, Set<string>>();
@@ -34,17 +32,7 @@ export class CellOutput {
     public static resetCell(cell: NotebookCell) {
         tfVisContainersInACell.delete(cell);
     }
-    private get outputsByTfVisContainer() {
-        if (!NotebookTfVisOutputsByContainer.has(this.cell.notebook)) {
-            NotebookTfVisOutputsByContainer.set(
-                this.cell.notebook,
-                new Map<string, { cell: NotebookCell; output: NotebookCellOutput; deferred: Deferred<void> }>()
-            );
-        }
-        return NotebookTfVisOutputsByContainer.get(this.cell.notebook)!;
-    }
     private tempTask?: NotebookCellExecution;
-    private readonly rendererComms = notebooks.createRendererMessaging('tensorflow-vis-renderer');
     private get task() {
         if (this.tempTask) {
             return this.tempTask;
@@ -68,19 +56,6 @@ export class CellOutput {
         private readonly requestId: string
     ) {
         this.cell = originalTask.cell;
-        this.rendererComms.onDidReceiveMessage((e) => {
-            if (typeof e.message !== 'object' || !e.message) {
-                return;
-            }
-            type Message = {
-                containerId: string;
-                type: 'tfvisCleared';
-            };
-            const message = e.message as Message;
-            if (message.type === 'tfvisCleared') {
-                this.outputsByTfVisContainer.delete(message.containerId);
-            }
-        });
     }
     private setTask(task: NotebookCellExecution) {
         this.ended = false;
@@ -156,120 +131,6 @@ export class CellOutput {
             })
             .finally(() => this.endTempTask());
     }
-    public appendTensorflowVisOutput(output: DisplayData) {
-        const individualOutputItems: TensorFlowVis[] = [];
-        if (output.type === 'multi-mime') {
-            individualOutputItems.push(...(output.value.filter((item) => item.type === 'tensorFlowVis') as any));
-        } else if (output.type === 'tensorFlowVis') {
-            individualOutputItems.push(output as any);
-        }
-        if (individualOutputItems.length === 0) {
-            return;
-        }
-        this.promise = this.promise
-            .finally(async () => {
-                await Promise.all(
-                    individualOutputItems.map(async (value) => {
-                        switch (value.request) {
-                            case 'layer':
-                            case 'barchart':
-                            case 'confusionmatrix':
-                            case 'heatmap':
-                            case 'histogram':
-                            case 'modelsummary':
-                            case 'history':
-                            case 'linechart':
-                            case 'perclassaccuracy':
-                            case 'valuesdistribution':
-                            case 'table':
-                            case 'scatterplot':
-                            case 'registerfitcallback': {
-                                const containerId = JSON.stringify(value.container);
-                                const existingInfo = this.outputsByTfVisContainer.get(containerId);
-                                if (existingInfo) {
-                                    // If the output exists & we're just updating that,
-                                    // then send a message to that renderer (faster to update).
-                                    if (
-                                        existingInfo.cell.outputs.find(
-                                            (item) => item.metadata?.containerId === containerId
-                                        )
-                                    ) {
-                                        this.rendererComms.postMessage({
-                                            ...value
-                                        });
-                                        return;
-                                    }
-                                    if (!existingInfo.deferred.completed) {
-                                        return;
-                                    }
-                                    if (
-                                        existingInfo.deferred.completed &&
-                                        existingInfo.cell.outputs.find(
-                                            (item) => item.metadata?.containerId === containerId
-                                        )
-                                    ) {
-                                        this.rendererComms.postMessage({
-                                            ...value
-                                        });
-                                        return;
-                                    }
-                                    // Perhaps the user cleared the outputs.
-                                }
-                                // Create a new output item to render this information.
-                                const tfVisOutputToAppend = new NotebookCellOutput(
-                                    [
-                                        NotebookCellOutputItem.json(
-                                            value,
-                                            `application/vnd.tfjsvis.${value.request.toLowerCase()}`
-                                        )
-                                    ],
-                                    { containerId, requestId: value.requestId }
-                                );
-                                this.outputsByTfVisContainer.set(containerId, {
-                                    cell: this.cell,
-                                    output: tfVisOutputToAppend,
-                                    deferred: createDeferred<void>()
-                                });
-                                this.lastOutputStream = undefined;
-                                await this.task.appendOutput(tfVisOutputToAppend).then(noop, noop);
-                                // Wait for output to get created.
-                                if (
-                                    this.cell.outputs.find((item) => item.metadata?.containerId === containerId) &&
-                                    this.outputsByTfVisContainer.get(containerId)
-                                ) {
-                                    this.outputsByTfVisContainer.get(containerId)?.deferred.resolve();
-                                } else {
-                                    this.outputsByTfVisContainer.delete(containerId);
-                                }
-                                return;
-                            }
-                            case 'fitcallback': {
-                                // Look for this output.
-                                const containerId = JSON.stringify(value.container);
-                                const existingInfo = this.outputsByTfVisContainer.get(containerId);
-                                if (existingInfo) {
-                                    // Wait till the UI element is rendered by the renderer.
-                                    // & Once rendered, we can send a message instead of rendering outputs.
-                                    existingInfo.deferred.promise.finally(() =>
-                                        this.rendererComms.postMessage({
-                                            ...value
-                                        })
-                                    );
-                                }
-                                return;
-                            }
-                            case 'show':
-                            case 'setactivetab': {
-                                return;
-                            }
-                            default:
-                                break;
-                        }
-                    })
-                );
-            })
-            .finally(() => this.endTempTask());
-    }
     public appendOutput(output: DisplayData) {
         this.promise = this.promise
             .finally(async () => {
@@ -313,10 +174,6 @@ export class CellOutput {
                                 return items.push(
                                     NotebookCellOutputItem.json(data, 'application/vnd.ts.notebook.plotly+json')
                                 );
-                            }
-                            case 'tensorFlowVis': {
-                                // We have a separate method for this.
-                                return;
                             }
                             case 'markdown': {
                                 return items.push(NotebookCellOutputItem.text(value.value, 'text/markdown'));

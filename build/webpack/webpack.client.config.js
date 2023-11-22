@@ -12,8 +12,6 @@ module.exports = {
     cache: false,
     context: constants.ExtensionRootDir,
     entry: {
-        tfjsvis: './src/client/index.ts',
-        tfjsvisRenderer: './src/client/tfvis.ts',
         plotGenerator: './src/client/plotGenerator.ts'
     },
     output: {
@@ -29,7 +27,7 @@ module.exports = {
     },
     mode: isProdBuild ? 'production' : 'development',
     devtool: isProdBuild ? 'source-map' : 'inline-source-map',
-    externals: ['@tensorflow/tfjs'],
+    // externals: ['@tensorflow/tfjs'],
     // externals: ['@tensorflow/tfjs-vis', '@tensorflow/tfjs'],
     plugins: [
         ...common.getDefaultPlugins('client'),

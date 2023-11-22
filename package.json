@@ -2,7 +2,7 @@
     "name": "typescript-notebook",
     "displayName": "Node.js Notebooks (REPL)",
     "description": "Iterative & interactive programming for Node.js in JavaScript/TypeScript (REPL), with great support for Tensorflow.js, debugging, & more..",
-    "version": "2.0.5",
+    "version": "3.0.0",
     "engines": {
         "vscode": "^1.62.0"
     },
@@ -68,8 +68,7 @@
         "onCommand:node.notebook.sample.arquero.htmlOutput",
         "onCommand:node.notebook.new",
         "onCommand:node.notebook.newREPL",
-        "onRenderer:node-notebook-plot-renderer",
-        "onRenderer:tensorflow-vis-renderer"
+        "onRenderer:node-notebook-plot-renderer"
     ],
     "main": "./out/extension/index.js",
     "contributes": {
@@ -202,29 +201,6 @@
                     "application/vnd.ts.notebook.plotly+json"
                 ],
                 "requiresMessaging": "always"
-            },
-            {
-                "id": "tensorflow-vis-renderer",
-                "entrypoint": "./out/views/tfjsvisRenderer.js",
-                "requiresMessaging": "always",
-                "displayName": "Tensorflow Visualization",
-                "mimeTypes": [
-                    "application/vnd.tfjsvis",
-                    "application/vnd.tfjsvis.registerfitcallback",
-                    "application/vnd.tfjsvis.fitcallback",
-                    "application/vnd.tfjsvis.history",
-                    "application/vnd.tfjsvis.table",
-                    "application/vnd.tfjsvis.histogram",
-                    "application/vnd.tfjsvis.modelsummary",
-                    "application/vnd.tfjsvis.linechart",
-                    "application/vnd.tfjsvis.scatterplot",
-                    "application/vnd.tfjsvis.confusionmatrix",
-                    "application/vnd.tfjsvis.heatmap",
-                    "application/vnd.tfjsvis.barchart",
-                    "application/vnd.tfjsvis.perclassaccuracy",
-                    "application/vnd.tfjsvis.valuesdistribution",
-                    "application/vnd.tfjsvis.layer"
-                ]
             }
         ],
         "configuration": {
@@ -410,7 +386,6 @@
         "install": "^0.13.0",
         "less": "^3.11.3",
         "mocha": "^9.0.3",
-        "npm": "^6.14.5",
         "prettier": "^3.1.0",
         "style-loader": "^1.2.1",
         "svg-inline-loader": "^0.8.2",
