@@ -1,7 +1,7 @@
 {
     "name": "typescript-notebook",
     "displayName": "Node.js Notebooks (REPL)",
-    "description": "Iterative & interactive programming for Node.js in JavaScript/TypeScript (REPL), with great support for Tensorflow.js, debugging, & more..",
+    "description": "Iterative & interactive programming for Node.js in JavaScript/TypeScript (REPL), with great support  debugging, & more..",
     "version": "2.0.5",
     "engines": {
         "vscode": "^1.62.0"
@@ -30,7 +30,6 @@
         "REPL",
         "typescript",
         "javascript",
-        "tensorflow",
         "plotly"
     ],
     "categories": [
@@ -49,17 +48,10 @@
     "activationEvents": [
         "onNotebook:node-notebook",
         "onWalkthrough:plotlyWalkthrough",
-        "onWalkthrough:danfojsWalkthrough",
-        "onWalkthrough:tensorflowWalkthrough",
         "onWalkthrough:nodeNotebookWalkthrough",
         "onCommand:node.notebook.sample",
         "onCommand:node.notebook.sample.plotly.saveToFile",
         "onCommand:node.notebook.sample.plotly.embedInDiv",
-        "onCommand:node.notebook.sample.danfojs.htmlOutput",
-        "onCommand:node.notebook.sample.danfojs.plots",
-        "onCommand:node.notebook.sample.danfojs.embedInDiv",
-        "onCommand:node.notebook.sample.tensorflow.sample",
-        "onCommand:node.notebook.sample.tensorflow.tensorboard",
         "onCommand:node.notebook.sample.basics.sample",
         "onCommand:node.notebook.sample.basics.shellScripts",
         "onCommand:node.notebook.sample.basics.tips",
@@ -68,8 +60,7 @@
         "onCommand:node.notebook.sample.arquero.htmlOutput",
         "onCommand:node.notebook.new",
         "onCommand:node.notebook.newREPL",
-        "onRenderer:node-notebook-plot-renderer",
-        "onRenderer:tensorflow-vis-renderer"
+        "onRenderer:node-notebook-plot-renderer"
     ],
     "main": "./out/extension/index.js",
     "contributes": {
@@ -175,23 +166,10 @@
             }
         ],
         "viewsContainers": {
-            "activitybar": [
-                {
-                    "icon": "resources/icons/tf.svg",
-                    "id": "node-notebook",
-                    "title": "Tensorflow Visualization"
-                }
-            ]
+            "activitybar": []
         },
         "views": {
-            "node-notebook": [
-                {
-                    "name": "Tensorflow Visualization",
-                    "id": "tfjs-vis",
-                    "type": "webview",
-                    "when": "node_notebook.tfjs-vis.used && !config.node_notebook.disableTensorflowVis"
-                }
-            ]
+            "node-notebook": []
         },
         "notebookRenderer": [
             {
@@ -202,29 +180,6 @@
                     "application/vnd.ts.notebook.plotly+json"
                 ],
                 "requiresMessaging": "always"
-            },
-            {
-                "id": "tensorflow-vis-renderer",
-                "entrypoint": "./out/views/tfjsvisRenderer.js",
-                "requiresMessaging": "always",
-                "displayName": "Tensorflow Visualization",
-                "mimeTypes": [
-                    "application/vnd.tfjsvis",
-                    "application/vnd.tfjsvis.registerfitcallback",
-                    "application/vnd.tfjsvis.fitcallback",
-                    "application/vnd.tfjsvis.history",
-                    "application/vnd.tfjsvis.table",
-                    "application/vnd.tfjsvis.histogram",
-                    "application/vnd.tfjsvis.modelsummary",
-                    "application/vnd.tfjsvis.linechart",
-                    "application/vnd.tfjsvis.scatterplot",
-                    "application/vnd.tfjsvis.confusionmatrix",
-                    "application/vnd.tfjsvis.heatmap",
-                    "application/vnd.tfjsvis.barchart",
-                    "application/vnd.tfjsvis.perclassaccuracy",
-                    "application/vnd.tfjsvis.valuesdistribution",
-                    "application/vnd.tfjsvis.layer"
-                ]
             }
         ],
         "configuration": {
@@ -237,22 +192,10 @@
                     "description": "Register ts-node that allows importing TypeScript modules without the user having to transpile TypeScript into JavaScript.",
                     "scope": "machine"
                 },
-                "node_notebook.disableTensorflowVis": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Disables the Tensorflow Visualization panel (even if @tensorflow/tfjs-vis is used the panel will not be displayed.",
-                    "scope": "machine"
-                },
                 "node_notebook.disablePseudoTerminal": {
                     "type": "boolean",
                     "default": false,
                     "description": "Disables the pseudo terminal (backed by node-pty). If disabled, will always use process based shells which won't provide the best experience.",
-                    "scope": "machine"
-                },
-                "node_notebook.inlineTensorflowVisualizations": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Display tensorflow visualization within the notebook.",
                     "scope": "machine"
                 }
             }
@@ -285,43 +228,11 @@
                         }
                     },
                     {
-                        "id": "tensorflowVis",
-                        "title": "Tensorflow visualizations in node.js",
-                        "description": "Tensorflow visualization ([@tensorflow/tfjs-vis](https://www.npmjs.com/package/@tensorflow/tfjs-vis)) are no longer limited to just browser environments.",
-                        "media": {
-                            "markdown": "resources/docs/tensorflow/sample.md"
-                        }
-                    },
-                    {
-                        "id": "tensorflowBoards",
-                        "title": "Tensorboards for Tensorflow.js in node.js",
-                        "description": "View tensorboards in Visual Studio Code.",
-                        "media": {
-                            "markdown": "resources/docs/tensorflow/tensorboard.md"
-                        }
-                    },
-                    {
                         "id": "plotlyGenerate",
                         "title": "Plotly plots node.js",
                         "description": "Generate & view plotly plots in node.js.",
                         "media": {
                             "markdown": "resources/docs/plotly/generate.md"
-                        }
-                    },
-                    {
-                        "id": "danfojsHtmlOutput",
-                        "title": "Danfo.js with rich dataframes node.js",
-                        "description": "Generate and view rich Html outputs for dataframes and series when using danfo.js.",
-                        "media": {
-                            "markdown": "resources/docs/danfojs/htmlOutput.md"
-                        }
-                    },
-                    {
-                        "id": "danfojsPlots",
-                        "title": "Danfo.js plots in node.js",
-                        "description": "Generate & view danfor.js plots in node.js.",
-                        "media": {
-                            "markdown": "resources/docs/danfojs/plots.md"
                         }
                     },
                     {
@@ -356,7 +267,6 @@
         "postinstall": "npm run download-api && npm run installtsnode && npm run fixNodeModule"
     },
     "dependencies": {
-        "@tensorflow/tfjs": "^4.13.0",
         "acorn": "^8.4.1",
         "acorn-walk": "^8.1.1",
         "error-stack-parser": "^2.0.6",
@@ -392,13 +302,13 @@
         "@types/yargs": "^17.0.2",
         "@typescript-eslint/eslint-plugin": "^6.12.0",
         "@typescript-eslint/parser": "^6.12.0",
+        "@vscode/debugprotocol": "^1.64.0",
         "@vscode/dts": "0.4.0",
         "@vscode/test-electron": "^2.3.6",
         "arquero": "^4.8.4",
         "concurrently": "^5.2.0",
         "copy-webpack-plugin": "^11.0.0",
         "css-loader": "^3.5.3",
-        "danfojs-node": "^0.2.7",
         "eslint": "^8.54.0",
         "eslint-config-airbnb": "^19.0.4",
         "eslint-config-prettier": "^9.0.0",
@@ -421,7 +331,6 @@
         "transform-loader": "^0.2.4",
         "ts-loader": "^9.5.1",
         "url-loader": "^4.1.0",
-        "vscode-debugprotocol": "^1.48.0",
         "webpack": "^5.89.0",
         "webpack-bundle-analyzer": "^4.10.1",
         "webpack-cli": "^5.1.4",

@@ -1,9 +1,11 @@
+/*
 // backgroundColor: 'white'
 const path = require('path');
 const fs = require('fs');
 const { ExtensionRootDir } = require('./constants');
 
 function fixTensorflowVisColors() {
+
     const files = [
         path.join(ExtensionRootDir, 'node_modules', '@tensorflow', 'tfjs-vis', 'dist', 'components', 'visor.js'),
         path.join(ExtensionRootDir, 'node_modules', '@tensorflow', 'tfjs-vis', 'dist', 'components', 'tabs.js'),
@@ -20,6 +22,8 @@ function fixTensorflowVisColors() {
             fs.writeFileSync(file, contents, { flag: 'w' });
         }
     });
+    
 }
 
 fixTensorflowVisColors();
+*/
