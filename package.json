@@ -352,11 +352,9 @@
         "prettier-fix": "prettier 'src/**/*.ts*' --write && prettier 'build/**/*.js' --write",
         "download-api": "dts dev",
         "postdownload-api": "dts main",
-        "fixNodeModule": "node build/fixNodeModules.js",
-        "postinstall": "npm run download-api && npm run installtsnode && npm run fixNodeModule"
+        "postinstall": "npm run download-api && npm run installtsnode "
     },
     "dependencies": {
-        "@tensorflow/tfjs": "^4.13.0",
         "acorn": "^8.4.1",
         "acorn-walk": "^8.1.1",
         "error-stack-parser": "^2.0.6",
@@ -398,7 +396,6 @@
         "concurrently": "^5.2.0",
         "copy-webpack-plugin": "^11.0.0",
         "css-loader": "^3.5.3",
-        "danfojs-node": "^0.2.7",
         "eslint": "^8.54.0",
         "eslint-config-airbnb": "^19.0.4",
         "eslint-config-prettier": "^9.0.0",
