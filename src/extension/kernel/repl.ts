@@ -14,7 +14,7 @@ export class NodeRepl {
                 );
                 await commands.executeCommand('notebook.selectKernel', {
                     id: Controller.interactiveController.id,
-                    extension: 'donjayamanne.typescript-notebook'
+                    extension: 'bsorrentino.typescript-notebook'
                 });
             })
         );

@@ -1,23 +1,29 @@
 {
     "name": "typescript-notebook",
-    "displayName": "Node.js Notebooks (REPL)",
-    "description": "Iterative & interactive programming for Node.js in JavaScript/TypeScript (REPL), with great support for Tensorflow.js, debugging, & more..",
-    "version": "3.0.1",
+    "displayName": "Node Notebooks",
+    "description": "Iterative & interactive programming for Node.js in JavaScript/TypeScript (REPL), debugging, & more..",
+    "version": "3.0.2",
     "engines": {
-        "vscode": "^1.62.0"
+        "vscode": "^1.75.0"
     },
-    "publisher": "donjayamanne",
+    "publisher": "bsorrentino",
     "author": {
         "name": "Don Jayamanne"
     },
+    "maintainers": [
+        { 
+            "name": "bsorrentino",
+            "email": "bartolomeo.sorrentino@gmail.com"
+        }
+    ],
     "license": "MIT",
-    "homepage": "https://github.com/DonJayamanne/typescript-notebook",
+    "homepage": "https://github.com/bsorrentino/typescript-notebook",
     "repository": {
         "type": "git",
-        "url": "https://github.com/DonJayamanne/typescript-notebook"
+        "url": "https://github.com/bsorrentino/typescript-notebook.git"
     },
     "bugs": {
-        "url": "https://github.com/DonJayamanne/typescript-notebook"
+        "url": "https://github.com/bsorrentino/typescript-notebook"
     },
     "preview": true,
     "icon": "resources/icons/logo.png",
