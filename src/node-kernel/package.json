@@ -6,16 +6,17 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
+    "publisher": "bsorrentino",
     "author": {
         "name": "Don Jayamanne"
     },
     "homepage": "https://marketplace.visualstudio.com/items?itemName=donjayamanne.typescript-notebook",
     "repository": {
         "type": "git",
-        "url": "https://github.com/DonJayamanne/typescript-notebook"
+        "url": "https://github.com/bsorrentino/typescript-notebook"
     },
     "bugs": {
-        "url": "https://github.com/DonJayamanne/typescript-notebook"
+        "url": "https://github.com/bsorrentino/typescript-notebook"
     },
     "types": "./index.d.ts",
     "license": "MIT"

@@ -2,9 +2,9 @@
     "name": "typescript-notebook",
     "displayName": "Node Notebooks",
     "description": "Iterative & interactive programming for Node.js in JavaScript/TypeScript (REPL), debugging, & more..",
-    "version": "3.0.1",
+    "version": "3.0.2",
     "engines": {
-        "vscode": "^1.62.0"
+        "vscode": "^1.75.0"
     },
     "publisher": "bsorrentino",
     "author": {

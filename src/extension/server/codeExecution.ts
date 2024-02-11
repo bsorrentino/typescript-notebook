@@ -13,8 +13,12 @@ import { noop } from '../coreUtils';
 import { createConsoleOutputCompletedMarker } from '../const';
 import { ArqueroFormatter } from './extensions/arqueroFormatter';
 import { ReadLineProxy } from './extensions/readLineProxy';
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const Module = require('module');
+
+type NodeModuleEx = NodeModule & { _load: (request: string, parent: NodeModule, isMain?: boolean) => any };
+
+const Module = require('module') as NodeModuleEx
 
 let replServer: repl.REPLServer;
 let configuration: Configuration | undefined;
@@ -221,6 +225,37 @@ export async function execCode(request: RunCellRequest): Promise<void> {
     }
 }
 
+
+const originalLoad = Module._load;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+Module._load = function (request: string, parent: NodeModule, isMain?: boolean) {
+    
+    // if (
+    //     parent &&
+    //     request === '@tensorflow/tfjs-core' &&
+    //     parent.filename &&
+    //     parent.filename.includes('@tensorflow/tfjs-vis') &&
+    //     !parent.filename.includes('@tensorflow/tfjs-vis/dist/util/math')
+    // ) {
+    //     return {};
+    // }
+    if (request === 'node-kernel') {
+        return Utils.instance;
+    }
+    
+
+    // eslint-disable-next-line prefer-rest-params
+    const result = originalLoad.apply(this, [request, parent, isMain]);
+    if (request === 'readline') {
+        ReadLineProxy.initialize(result);
+    }
+    
+    if (request === 'arquero') {
+        ArqueroFormatter.initialize(result);
+    }
+    return result;
+};
+
 // let injectedCustomTFLogger = false;
 
 // /**
@@ -273,31 +308,3 @@ export async function execCode(request: RunCellRequest): Promise<void> {
 //         console.error('Failed to inject custom tensorflow progress bar', ex);
 //     }
 // }
-const originalLoad = Module._load;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-Module._load = function (request: any, parent: any) {
-    if (
-        parent &&
-        request === '@tensorflow/tfjs-core' &&
-        parent.filename &&
-        parent.filename.includes('@tensorflow/tfjs-vis') &&
-        !parent.filename.includes('@tensorflow/tfjs-vis/dist/util/math')
-    ) {
-        return {};
-    }
-    if (request === 'node-kernel') {
-        return Utils.instance;
-    }
-    
-
-    // eslint-disable-next-line prefer-rest-params
-    const result = originalLoad.apply(this, arguments);
-    if (request === 'readline') {
-        ReadLineProxy.initialize(result);
-    }
-    
-    if (request === 'arquero') {
-        ArqueroFormatter.initialize(result);
-    }
-    return result;
-};
