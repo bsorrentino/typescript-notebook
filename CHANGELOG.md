@@ -2,6 +2,30 @@
 
 Changelog of typescript-notebook.
 
+## v3.0.3 (2024-02-13)
+
+### Features
+
+-  add changelog generation tool ([a2061](https://github.com/bsorrentino/typescript-notebook/commit/a206137c643d776) bsorrentino)  
+
+### Bug Fixes
+
+-  not remove error description from output ([a2604](https://github.com/bsorrentino/typescript-notebook/commit/a260460ce907084) bsorrentino)  
+
+### Other changes
+
+**Merge branch 'release/3.0.3'**
+
+
+[2ee36](https://github.com/bsorrentino/typescript-notebook/commit/2ee3619ba2556e6) bsorrentino *2024-02-13 11:42:00*
+
+**Merge tag 'v3.0.2' into develop**
+
+* new version 
+
+[90ddb](https://github.com/bsorrentino/typescript-notebook/commit/90ddb4196ea4c01) bsorrentino *2024-02-11 17:19:47*
+
+
 ## v3.0.2 (2024-02-11)
 
 ### Other changes
