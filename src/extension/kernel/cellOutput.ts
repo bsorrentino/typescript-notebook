@@ -190,18 +190,24 @@ export class CellOutput {
             })
             .finally(() => this.endTempTask());
     }
+    
     public appendError(ex?: Partial<Error>) {
         this.promise = this.promise
             .finally(() => {
+                
                 CellDiagnosticsProvider.displayErrorsAsProblems(this.cell.notebook, ex);
                 const newEx = new Error(ex?.message || '<unknown>');
                 newEx.name = ex?.name || '';
                 newEx.stack = ex?.stack || '';
+
                 // We dont want the same error thing display again
                 // (its already in the stack trace & the error renderer displays it again)
-                newEx.stack = newEx.stack.replace(`${newEx.name}: ${newEx.message}\n`, '');
+                // newEx.stack = newEx.stack.replace(`${newEx.name}: ${newEx.message}\n`, '');
+
                 newEx.stack = Compiler.fixCellPathsInStackTrace(this.cell.notebook, newEx);
+
                 const output = new NotebookCellOutput([NotebookCellOutputItem.error(newEx)]);
+                
                 this.task.appendOutput(output);
             })
             .then(noop, (ex) => console.error('Failed to append the Error output in cellOutput', ex))
