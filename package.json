@@ -269,7 +269,8 @@
         "prettier-fix": "prettier 'src/**/*.ts*' --write && prettier 'build/**/*.js' --write",
         "download-api": "dts dev",
         "postdownload-api": "dts main",
-        "postinstall": "npm run download-api && npm run installtsnode "
+        "postinstall": "npm run download-api && npm run installtsnode",
+        "changelog": "git-changelog-command-line -of CHANGELOG.md"
     },
     "dependencies": {
         "acorn": "^8.4.1",
