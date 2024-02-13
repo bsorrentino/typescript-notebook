@@ -300,10 +300,22 @@ export class JavaScriptKernel implements IDisposable {
                         }
                     }
                     if (message.success === false && message.ex) {
+
+                        console.trace('==> CellExec ERROR:', message.ex );
+
                         const responseEx = message.ex as unknown as Partial<Error>;
                         const error = new Error(responseEx.message || 'unknown');
                         error.name = responseEx.name || error.name;
                         error.stack = responseEx.stack || error.stack;
+
+                        if( error.stack ) {
+                            error.stack = error.stack
+                                                .split('\n')
+                                                .map( line => line.trim())
+                                                .filter(line => line !== '')
+                                                .join('\n');
+                        }
+                        
                         // Append error after we've received all of the console outputs.
                         if (this.waitingForLastOutputMessage) {
                             this.waitingForLastOutputMessage?.deferred.promise.then(() =>
