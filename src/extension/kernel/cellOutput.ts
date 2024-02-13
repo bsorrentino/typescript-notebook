@@ -190,23 +190,34 @@ export class CellOutput {
             })
             .finally(() => this.endTempTask());
     }
-    public appendError(ex?: Partial<Error>) {
-        this.promise = this.promise
-            .finally(() => {
-                CellDiagnosticsProvider.displayErrorsAsProblems(this.cell.notebook, ex);
-                const newEx = new Error(ex?.message || '<unknown>');
-                newEx.name = ex?.name || '';
-                newEx.stack = ex?.stack || '';
-                // We dont want the same error thing display again
-                // (its already in the stack trace & the error renderer displays it again)
-                newEx.stack = newEx.stack.replace(`${newEx.name}: ${newEx.message}\n`, '');
-                newEx.stack = Compiler.fixCellPathsInStackTrace(this.cell.notebook, newEx);
-                const output = new NotebookCellOutput([NotebookCellOutputItem.error(newEx)]);
-                this.task.appendOutput(output);
-            })
-            .then(noop, (ex) => console.error('Failed to append the Error output in cellOutput', ex))
-            .finally(() => this.endTempTask());
+
+    public async appendError(ex?: Partial<Error>) {
+                
+        CellDiagnosticsProvider.displayErrorsAsProblems(this.cell.notebook, ex);
+        const newEx = new Error(ex?.message || '<unknown>');
+        newEx.name = ex?.name || '';
+        newEx.stack = ex?.stack || '';
+
+        // We dont want the same error thing display again
+        // (its already in the stack trace & the error renderer displays it again)
+        // newEx.stack = newEx.stack.replace(`${newEx.name}: ${newEx.message}\n`, '');
+
+        newEx.stack = Compiler.fixCellPathsInStackTrace(this.cell.notebook, newEx);
+
+        const output = new NotebookCellOutput([NotebookCellOutputItem.error(newEx)]);
+        
+        try {
+            await this.task.appendOutput(output);
+
+        }
+        catch (ex) {
+            console.error('Failed to append the Error output in cellOutput', ex)
+        }
+        finally {
+            this.endTempTask()
+        };
     }
+    
     private endTempTask() {
         if (this.tempTask) {
             this.tempTask.end(this.cell.executionSummary?.success, this.cell.executionSummary?.timing?.endTime);

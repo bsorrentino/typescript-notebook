@@ -9,7 +9,8 @@ import {
 } from 'vscode';
 import { IDisposable } from '../types';
 import { disposeAllDisposables } from '../utils';
-import { parse as parseStack } from 'error-stack-parser';
+import { parse as parseStack } from 'error-stack-parser'
+
 import type ErrorStackParser from 'error-stack-parser';
 import { Compiler } from './compiler';
 
@@ -39,9 +40,10 @@ export class CellDiagnosticsProvider {
         let stacks: ErrorStackParser.StackFrame[] = [];
         try {
             stacks = parseStack(ex as Error);
-        } catch (ex) {
+        } catch (ex:any) {
             // TODO: Seems to fail in windows.
-            console.error('Failed to parse Stack trace', ex);
+            // console.error('Failed to parse Stack trace', ex);
+            console.warn('Failed to parse Stack trace:', ex.message);
             return;
         }
         if (stacks.length === 0) {
