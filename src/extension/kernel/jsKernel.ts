@@ -301,8 +301,6 @@ export class JavaScriptKernel implements IDisposable {
                     }
                     if (message.success === false && message.ex) {
 
-                        console.trace('==> CellExec ERROR:', message.ex );
-
                         const responseEx = message.ex as unknown as Partial<Error>;
                         const error = new Error(responseEx.message || 'unknown');
                         error.name = responseEx.name || error.name;
