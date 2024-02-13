@@ -275,7 +275,7 @@
         "acorn": "^8.4.1",
         "acorn-walk": "^8.1.1",
         "arquero": "^4.8.4",
-        "error-stack-parser": "^2.0.6",
+        "error-stack-parser": "^2.1.4",
         "file-type": "^16.5.2",
         "get-port": "^5.1.1",
         "is-plain-object": "^5.0.0",
